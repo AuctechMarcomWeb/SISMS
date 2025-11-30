@@ -1,0 +1,80 @@
+import RNFetchBlob from 'react-native-blob-util';
+import Share from 'react-native-share';
+import { PermissionsAndroid, Platform } from 'react-native';
+import { Alert } from 'react-native';
+
+export const requestStoragePermission = async () => {
+  console.log('function to ask for allowance');
+  if (Platform.OS === 'android' && Platform.Version < 33) {
+    // Android <=12: legacy external storage
+    const granted = await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+      {
+        title: 'Storage Permission',
+        message: 'App needs access to storage to download files.',
+        buttonPositive: 'Allow',
+        buttonNegative: 'Deny',
+      },
+    );
+    return granted === PermissionsAndroid.RESULTS.GRANTED;
+  }
+
+  // Android 13+ or iOS: no runtime permission needed if using RNFetchBlob / DownloadManager
+  return true;
+};
+
+// Download function
+export const handleDownload = async (fileUrl, fileName) => {
+  console.log("Entered the handl donload function", fileUrl, fileName);
+  
+  const { config, fs } = RNFetchBlob;
+  const path =
+    Platform.OS === 'android'
+      ? `${fs.dirs.DownloadDir}/${fileName}`
+      : `${fs.dirs.DocumentDir}/${fileName}`; // iOS
+
+  config({
+    fileCache: true,
+    appendExt: 'pdf',
+    path,
+    addAndroidDownloads: {
+      useDownloadManager: true,
+      notification: true,
+      path,
+      description: 'Invoice PDF',
+    },
+  })
+    .fetch('GET', fileUrl)
+    .then(res => {
+      Alert.alert('File downloaded to: ' + res.path());
+    })
+    .catch(err => console.log(err));
+};
+
+export const handleShare = async fileUrl => {
+  if (!fileUrl) return;
+
+  try {
+    // On iOS we need to download file first to local path for sharing
+    let localUrl = fileUrl;
+    if (Platform.OS === 'ios' && !fileUrl.startsWith('file://')) {
+      const { fs, config } = RNFetchBlob;
+      const filePath = `${fs.dirs.DocumentDir}/temp_invoice.pdf`;
+      const res = await config({ fileCache: true, path: filePath }).fetch(
+        'GET',
+        fileUrl,
+      );
+      localUrl = 'file://' + res.path();
+    }
+
+    await Share.open({
+      url: localUrl,
+      type: 'application/pdf',
+      showAppsToView: true,
+    });
+  } catch (err) {
+    if (err && err.error !== 'User did not share') {
+      console.error('Share error:', err);
+    }
+  }
+};
