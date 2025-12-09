@@ -1,19 +1,14 @@
 import React from 'react';
-import { Platform, View, StyleSheet } from 'react-native';
-import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { View, StyleSheet } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const ScreenWrapper = ({ children, backgroundColor = '#fff', style }) => {
-  const insets = useSafeAreaInsets();
-
   return (
     <SafeAreaView style={[styles.safeArea, { backgroundColor }]}>
       <View
         style={[
           styles.container,
-          {
-            paddingTop: Platform.OS === 'ios' ? insets.top : 0, // ✅ only iOS gets padding
-            backgroundColor,
-          },
+          { backgroundColor },
           style,
         ]}
       >

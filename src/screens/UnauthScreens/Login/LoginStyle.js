@@ -2,19 +2,14 @@ import { StyleSheet, Platform } from 'react-native';
 import { wp, hp } from '../../../utils/Functions/Responsive';
 
 const styles = StyleSheet.create({
-  container: {
-    // flex: 1,
-    backgroundColor: '#F5F0E8',
-  },
 
   scrollViewContent: {
-    // flex:1,
     flexGrow: 1,
-    paddingBottom: hp(3), // Add padding at bottom for keyboard
+    paddingBottom: hp(3),
   },
 
   header: {
-    paddingTop: Platform.OS === 'ios' ? hp(2) : hp(3),
+    paddingTop: hp(1), // Same for both platforms
     paddingHorizontal: wp(4),
     paddingBottom: hp(1),
   },
@@ -38,7 +33,7 @@ const styles = StyleSheet.create({
 
   illustration: {
     width: wp(75),
-    height: wp(55), // Reduced slightly for small screens
+    height: wp(55),
   },
 
   textContainer: {
@@ -128,7 +123,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#8B4513',
     paddingHorizontal: wp(10),
     paddingVertical: hp(1.8),
-      alignSelf: 'center', // make button size wrap its content
+    alignSelf: 'center',
     borderRadius: wp(4),
     marginBottom: hp(2),
     alignItems: 'center',
