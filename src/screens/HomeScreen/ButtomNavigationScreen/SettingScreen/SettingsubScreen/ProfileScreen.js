@@ -166,6 +166,7 @@ const ProfileScreen = ({ navigation }) => {
             value={name}
             onChangeText={setName}
             placeholder="Name"
+            placeholderTextColor="#999"
           />
         </View>
 
@@ -176,6 +177,7 @@ const ProfileScreen = ({ navigation }) => {
             value={email}
             onChangeText={setEmail}
             placeholder="Email"
+            placeholderTextColor="#999"
           />
         </View>
 
