@@ -28,58 +28,60 @@ const Login = ({ navigation }) => {
   const dispatch = useDispatch();
 
   const handleGetOTP = async () => {
-    console.log("📞 Entered Phone =>", mobileNumber);
+  console.log("📞 Entered Phone =>", mobileNumber);
 
-    if (!mobileNumber.trim()) {
-      Alert.alert('Error', 'Please enter your mobile number');
-      return;
-    }
+  if (!mobileNumber.trim()) {
+    Alert.alert('Error', 'Please enter your mobile number');
+    return;
+  }
 
-    if (mobileNumber.length !== 10) {
-      Alert.alert('Error', 'Please enter a valid 10-digit mobile number');
-      return;
-    }
+  if (mobileNumber.length !== 10) {
+    Alert.alert('Error', 'Please enter a valid 10-digit mobile number');
+    return;
+  }
 
-    setIsLoading(true);
+  setIsLoading(true);
 
-    try {
-      const response = await LoginAPI({ phone: `91${mobileNumber}` });
+  try {
+    const response = await LoginAPI({ phone: mobileNumber });
 
-      console.log("📦 API Raw Response =>", response?.data);
+    console.log("📦 API Raw Response =>", response?.data);
 
-      const userId = response?.data?.id;
-      const otp = response?.data?.otp;
+    const userId = response?.data?.id;
+    const otp = response?.data?.otp;
 
-      console.log("🆔 Extracted userId =>", userId);
-      console.log("🔐 OTP Received =>", otp);
+    console.log("🆔 Extracted userId =>", userId);
+    console.log("🔐 OTP Received =>", otp);
 
-      await AsyncStorage.setItem("userId", userId);
-      console.log("📍 Saved to AsyncStorage =>", userId);
+    // ✅ FIX: AsyncStorage requires STRING
+    await AsyncStorage.setItem("userId", String(userId));
 
-      dispatch(setUserId(userId));
-      dispatch(setUser({ phone: `91${mobileNumber}`, id: userId }));
+    console.log("📍 Saved to AsyncStorage =>", String(userId));
 
-      console.log("🟢 Redux Updated =>", {
-        userId,
-        user: { phone: `91${mobileNumber}`, id: userId },
+    dispatch(setUserId(userId));
+    dispatch(setUser({ phone: mobileNumber, id: userId }));
+
+    console.log("🟢 Redux Updated =>", {
+      userId,
+      user: { phone: mobileNumber, id: userId },
+    });
+
+    setIsLoading(false);
+
+    if (otp) {
+      navigation.navigate("OtpScreen", {
+        otpsend: otp,
+        phone: mobileNumber,
       });
-
-      setIsLoading(false);
-
-      if (otp) {
-        console.log("➡ Navigating to OTP Screen...");
-        navigation.navigate("OtpScreen", {
-          otpsend: otp,
-          phone: `91${mobileNumber}`,
-        });
-      }
-
-      Alert.alert("Success", `OTP sent to +91${mobileNumber}`);
-    } catch (error) {
-      console.log("❌ Error occurred while login =>", error);
-      setIsLoading(false);
     }
-  };
+
+    Alert.alert("Success", `OTP sent to +91${mobileNumber}`);
+  } catch (error) {
+    console.log("❌ Error occurred while login =>", error);
+    setIsLoading(false);
+  }
+};
+
 
   const handleLostNumber = () => {
     navigation.navigate('RegisteredEmail');
@@ -139,12 +141,12 @@ const Login = ({ navigation }) => {
                 />
               </View>
 
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 style={styles.lostNumberButton}
                 onPress={handleLostNumber}
               >
                 <Text style={styles.lostNumberText}>Lost Number?</Text>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
 
             <TouchableOpacity

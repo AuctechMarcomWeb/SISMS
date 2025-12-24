@@ -32,9 +32,11 @@ const styles = StyleSheet.create({
   textContainer: {
     width: '100%',
     marginBottom: hp(2),
+   marginTop: hp(2),
   },
 
   title: {
+    paddingTop:hp(2),
     fontSize: wp(5.4),
     fontWeight: '700',
     color: '#8B4513',

@@ -37,7 +37,8 @@ const styles = StyleSheet.create({
   },
 
   textContainer: {
-    paddingHorizontal: wp(1),
+    paddingHorizontal: wp(1.5),
+    paddingVertical: wp(1.5),
     marginBottom: hp(2),
   },
 
