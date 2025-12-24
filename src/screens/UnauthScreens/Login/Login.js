@@ -139,12 +139,12 @@ const Login = ({ navigation }) => {
                 />
               </View>
 
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 style={styles.lostNumberButton}
                 onPress={handleLostNumber}
               >
                 <Text style={styles.lostNumberText}>Lost Number?</Text>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
 
             <TouchableOpacity

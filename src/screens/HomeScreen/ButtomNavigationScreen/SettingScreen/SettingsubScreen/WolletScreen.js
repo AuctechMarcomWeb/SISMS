@@ -47,8 +47,7 @@ const WalletScreen = () => {
         {/* Main Content */}
         <View style={styles.content}>
           {/* Menu Cards */}
-          <View style={styles.menuContainer}>
-            {/* Wallet Card */}
+          {/* <View style={styles.menuContainer}>
             <TouchableOpacity
               style={[
                 styles.menuCard,
@@ -66,7 +65,7 @@ const WalletScreen = () => {
             </TouchableOpacity>
 
             {/* Transactions Card */}
-            <TouchableOpacity
+            {/* <TouchableOpacity
               style={[
                 styles.menuCard,
                 selectedCard === 'transactions' && styles.activeCard,
@@ -80,10 +79,10 @@ const WalletScreen = () => {
                 resizeMode="contain"
               />
               <Text style={styles.menuText}>TRANSACTIONS</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
 
             {/* Usage Card */}
-            <TouchableOpacity
+            {/* <TouchableOpacity
               style={[
                 styles.menuCard,
                 selectedCard === 'usage' && styles.activeCard,
@@ -98,7 +97,7 @@ const WalletScreen = () => {
               />
               <Text style={styles.menuText}>USAGE</Text>
             </TouchableOpacity>
-          </View>
+          </View>  */}
 
           {/* Available Credit Section */}
           <View style={styles.creditContainer}>

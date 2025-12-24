@@ -79,10 +79,10 @@ const OtpScreen = ({ route }) => {
             <View style={styles.dotsContainer}>
               <InputBoxContainer onChangeOtp={text => setUserOtp(text)} />
             </View>
-
+{/* 
             {otpsend && (
               <Text style={styles.otpText}>OTP: {otpsend}</Text>
-            )}
+            )} */}
 
             <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
               <Text style={styles.loginButtonText}>Login</Text>
