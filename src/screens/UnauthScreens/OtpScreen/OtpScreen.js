@@ -26,33 +26,57 @@ const OtpScreen = ({ route }) => {
 
   const [user_otp, setUserOtp] = useState("");
 
-  const handleLogin = async () => {
-    try {
-      const response = await VerifyOTP({ phone, user_otp });
-      const token = response?.data?.api_token;
-      const userId = response?.data?.id?.toString();
+ const handleLogin = async () => {
+  if (!user_otp || user_otp.length < 4) {
+    Alert.alert("Error", "Please enter valid OTP");
+    return;
+  }
 
-      if (token) {
-        await AsyncStorage.multiSet([
-          ["token", token],
-          ["userId", userId],
-        ]);
+  try {
+    const response = await VerifyOTP({
+      phone,
+      user_otp: user_otp, // ✅ ensure string
+    });
 
-        dispatch(
-          login({
-            token,
-            userId,
-            user: { ...prevUser, id: userId },
-          })
-        );
-      } else {
-        Alert.alert("Invalid OTP", "Please try again");
-      }
-    } catch (error) {
-      console.log("Error verifying OTP", error);
-      Alert.alert("Error", "Something went wrong");
+    console.log("✅ Verify OTP Response =>", response?.data);
+
+    const token = response?.data?.api_token;
+    const userId = response?.data?.id;
+
+    if (!token || !userId) {
+      Alert.alert("Invalid OTP", "Please try again");
+      return;
     }
-  };
+
+    // ✅ AsyncStorage only accepts strings
+    await AsyncStorage.multiSet([
+      ["token", String(token)],
+      ["userId", String(userId)],
+    ]);
+
+    dispatch(
+      login({
+        token,
+        userId: String(userId),
+        user: {
+          ...prevUser,
+          id: String(userId),
+        },
+      })
+    );
+
+    // ✅ Navigate after successful login
+    navigation.reset({
+      index: 0,
+      routes: [{ name: "Home" }],
+    });
+
+  } catch (error) {
+    console.log("❌ Error verifying OTP =>", error);
+    Alert.alert("Error", "Something went wrong");
+  }
+};
+
 
   return (
     <ScreenWrapper>
